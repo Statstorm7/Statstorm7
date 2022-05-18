@@ -42,10 +42,11 @@ if authentication_status:
             engine = 'openpyxl',
             sheet_name = sheet)
         df = df.astype(str)
+        df.set_index('Company', inplace=True)
         return df
-    
-    dfshow = get_data_from_excel('TotalShow')
 
+    dfshow = get_data_from_excel('TotalShow')
+    
     # ---- SIDEBAR ----
     st.sidebar.header('Please Filter Here:')
 
@@ -69,13 +70,14 @@ if authentication_status:
         options=dfshow['DATA_Center_ranking'].unique(),
         default=['1', '2', '3', '4'] )
     
+
     df_selection = dfshow.query('(State == @state) | (mobility_ranking == @mobility_score) | (ucaas_ccaas_ranking == @ucaas_score) | (cyber_ranking == @cyber_score) | (DATA_Center_ranking == @data_score)')
     
     st.dataframe(df_selection)
 
     selected_indices = st.multiselect('Select rows:', df_selection.index)
     selected_rows = df_selection.loc[selected_indices]
-    st.write('### Selected Companies', selected_rows)
+    st.write('### Selected Rows', selected_rows)
 
     # CSV Download button 
     st.download_button(label = 'Export current selection to CSV', data = selected_rows.to_csv(), mime='text/csv')
