@@ -53,12 +53,10 @@ if authentication_status:
     # add if user gets overall or only one of the categories or 2...
     # use second df for exports with all of the data
     dfshow = get_data_from_excel('TotalShow')
-    dfex = get_data_from_excel('TotalEx')
+    
 
     # ---- SIDEBAR ----
     st.sidebar.header('Please Filter Here:')
-
-    new = st.sidebar.radio('Only companies new in this show?', ('Yes', 'No'))
 
     state = st.sidebar.multiselect('Select the State:',
         options=dfshow['State'].unique(),
@@ -80,16 +78,13 @@ if authentication_status:
         options=dfshow['DATA_Center_ranking'].unique(),
         default=['1', '2', '3', '4'] )
     
-    if new == 'Yes':
-        df_selection = dfex.query('(State == @state) | (mobility_ranking == @mobility_score) | (ucaas_ccaas_ranking == @ucaas_score) | (cyber_ranking == @cyber_score) | (DATA_Center_ranking == @data_score)')
-    else:
-        df_selection = dfshow.query('(State == @state) | (mobility_ranking == @mobility_score) | (ucaas_ccaas_ranking == @ucaas_score) | (cyber_ranking == @cyber_score) | (DATA_Center_ranking == @data_score)')
+    df_selection = dfshow.query('(State == @state) | (mobility_ranking == @mobility_score) | (ucaas_ccaas_ranking == @ucaas_score) | (cyber_ranking == @cyber_score) | (DATA_Center_ranking == @data_score)')
     
     st.dataframe(df_selection)
 
     selected_indices = st.multiselect('Select rows:', df_selection.index)
     selected_rows = df_selection.loc[selected_indices]
-    st.write('### Selected Rows', selected_rows)
+    st.write('### Selected Companies', selected_rows)
 
     # CSV Download button 
     st.download_button(label = 'Export current selection to CSV', data = selected_rows.to_csv(), mime='text/csv')
