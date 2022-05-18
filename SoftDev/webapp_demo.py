@@ -13,12 +13,6 @@ import re
 from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 
-# be able to select each company
-# figure out the score filtering 
-# maybe add a folder in github with all the word docs
-# have people choose the companies for them to download the word docs
-# and only show the company name the score and the notes 
-
 st.set_page_config(page_title='Post-Show Dashboard', page_icon=':bar_chart:', layout='wide')
 
 names = ['demo_email']
@@ -49,11 +43,8 @@ if authentication_status:
             sheet_name = sheet)
         df = df.astype(str)
         return df
-
-    # add if user gets overall or only one of the categories or 2...
-    # use second df for exports with all of the data
-    dfshow = get_data_from_excel('TotalShow')
     
+    dfshow = get_data_from_excel('TotalShow')
 
     # ---- SIDEBAR ----
     st.sidebar.header('Please Filter Here:')
@@ -88,11 +79,7 @@ if authentication_status:
 
     # CSV Download button 
     st.download_button(label = 'Export current selection to CSV', data = selected_rows.to_csv(), mime='text/csv')
-
-    # https://discuss.streamlit.io/t/how-to-take-text-input-from-a-user/187/3
-
-# replace pdf with word, and add direct linking for some better one or 2 pagers. 
-# use https://automatetheboringstuff.com/chapter13/ python-docx
+    
     keepcols = ['Company',
     'Job Title',
     'State',
@@ -158,9 +145,6 @@ if authentication_status:
     
         return doc
 
-    # figure out if we want the user to be able to select the companies individually or just from the selection
-    # add a yes or no line for multiple or only a single company
-    # add a multiple choice between the categories for ucaas and all... 
     company_bull = st.radio('Do you want to transfer the current selection to Word doc or just one company?', ('Current Selection', '1 Company')) #current selection
 
     def download_button(object_to_download, download_filename, button_text, pickle_it=False):
